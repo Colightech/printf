@@ -10,7 +10,7 @@ int _printf(const char *format, ...)
 	int slen, ch, x, print_ch = 0;
 	va_list arglist;
 
-	if (format == NULL)
+	if (!format || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
 	va_start(arglist, format);
 
@@ -24,11 +24,7 @@ int _printf(const char *format, ...)
 		else
 		{
 			format++;
-			if (*format == '\0')
-			{
-				break;
-			}
-			else if (*format == '%')
+			if (*format == '%')
 			{
 				write(1, format, 1);
 				print_ch++;

@@ -10,7 +10,7 @@ int _printf(const char *format, ...)
 	int slen, ch, x, print_ch = 0;
 	va_list arglist;
 
-	if (!format || (format[0] == '%' && format[1] == '\0'))
+	if (format == NULL)
 		return (-1);
 	va_start(arglist, format);
 

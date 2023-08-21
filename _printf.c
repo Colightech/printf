@@ -24,7 +24,11 @@ int _printf(const char *format, ...)
 		else
 		{
 			format++;
-			if (*format == '%')
+			if (*format == '\0')
+			{
+				break;
+			}
+			else if (*format == '%')
 			{
 				write(1, format, 1);
 				print_ch++;

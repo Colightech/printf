@@ -43,7 +43,6 @@ int _printf(const char *format, ...)
 				write(1, str, slen);
 				print_ch += slen;
 			}
-			print_ch++;
 		}
 		format++;
 	}

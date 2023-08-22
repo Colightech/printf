@@ -33,15 +33,11 @@ int _printf(const char *format, ...)
 				continue;
 			}
 			if (format[x + 1] == '\0')
-				break;
-			if (format[x + 1] != '\0')
 			{
-				result = write(1, &format[x + 1], 1);
-				count += result;
-				x = x + 2;
-				continue;
+				break;
 			}
 		}
+		format++;
 	}
 	va_end(arglist);
 	return (count);

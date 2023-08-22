@@ -42,7 +42,6 @@ int _printf(const char *format, ...)
 				continue;
 			}
 		}
-		format++;
 	}
 	va_end(arglist);
 	return (count);

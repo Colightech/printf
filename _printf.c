@@ -29,6 +29,10 @@ int _printf(const char *format, ...)
 				result = fp(arglist);
 				count += result;
 			}
+			else if (fp == NULL)
+			{
+				break;
+			}
 		}
 		format++;
 	}

@@ -6,32 +6,40 @@
  */
 int _printf(const char *format, ...)
 {
-	int count = 0, result = 0;
+	int x = 0, count = 0, result = 0;
 	int (*fp)(va_list);
 	va_list arglist;
 
-	if (!format || (format[0]  == '%' && format[1] == '0'))
+	if (!format)
 		return (-1);
 	va_start(arglist, format);
-	while (*format)
+	while (format[x])
 	{
-		if (*format != '%')
+		if (format[x] != '%')
 		{
-			write(1, format, 1);
-			count ++;
+			result = write(1, &format[x], 1);
+			count += result;
+			x++;
+			continue;
 		}
-		else
+		else if (format[x] == '%')
 		{
-			format++;
-			fp = find_specifiers(format);
+			fp = find_specifiers(&format[x + 1]);
 			if (fp != NULL)
 			{
 				result = fp(arglist);
 				count += result;
+				x = x + 2;
+				continue;
 			}
-			else if (fp == NULL)
-			{
+			if (format[x + 1] == '\0')
 				break;
+			if (format[x + 1] != '\0')
+			{
+				result = write(1, &format[x + 1], 1);
+				count += result;
+				x = x + 2;
+				continue;
 			}
 		}
 		format++;

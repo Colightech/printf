@@ -9,6 +9,7 @@ int _printf(const char *format, ...)
 	int x = 0, count = 0, result = 0;
 	int (*fp)(va_list);
 	va_list arglist;
+	va_list arglist_copy;
 
 	if (!format)
 		return (-1);
@@ -27,7 +28,8 @@ int _printf(const char *format, ...)
 			fp = find_specifiers(&format[x + 1]);
 			if (fp != NULL)
 			{
-				result = fp(arglist);
+				va_copy(arglist_copy, arglist);
+				result = fp(arglist_copy);
 				count += result;
 				x = x + 2;
 				continue;

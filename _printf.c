@@ -6,46 +6,46 @@
  */
 int _printf(const char *format, ...)
 {
-	int x = 0, count = 0, result = 0;
-	int (*fp)(va_list);
+	char *str;
+	int slen, ch, x, print_ch = 0;
 	va_list arglist;
-	va_list arglist_copy;
 
-	if (!format)
+	if (format == NULL)
 		return (-1);
 	va_start(arglist, format);
-	while (format[x])
+
+	while (*format)
 	{
-		if (format[x] != '%')
+		if (*format != '%')
 		{
-			result = write(1, &format[x], 1);
-			count += result;
-			x++;
-			continue;
+			write(1, format, 1);
+			print_ch++;
 		}
-		else if (format[x] == '%')
+		else
 		{
-			fp = find_specifiers(&format[x + 1]);
-			if (fp != NULL)
+			format++;
+			if (*format == '%')
 			{
-				va_copy(arglist_copy, arglist);
-				result = fp(arglist_copy);
-				count += result;
-				x = x + 2;
-				continue;
+				write(1, format, 1);
+				print_ch++;
 			}
-			if (format[x + 1] == '\0')
-				break;
-			if (format[x + 1] != '\0')
+			else if (*format == 'c')
 			{
-				result = write(1, &format[x + 1], 1);
-				count += result;
-				x = x + 2;
-				continue;
+				ch = va_arg(arglist, int);
+				write(1, &ch, 1);
+				print_ch++;
+			}
+			else if (*format == 's')
+			{
+				str = va_arg(arglist, char *);
+				for (x = 0; str[x] != '\0'; x++)
+					slen++;
+				write(1, str, slen);
+				print_ch += slen;
 			}
 		}
-		x++;
+		format++;
 	}
 	va_end(arglist);
-	return (count);
+	return (print_ch);
 }

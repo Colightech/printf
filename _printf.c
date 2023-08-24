@@ -38,10 +38,15 @@ int _printf(const char *format, ...)
 			else if (*format == 's')
 			{
 				str = va_arg(arglist, char *);
-				for (x = 0; str[x] != '\0'; x++)
-					slen++;
-				write(1, str, slen);
-				print_ch += slen;
+				if (str == NULL)
+					return (-1);
+				else
+				{
+					for (x = 0; str[x] != '\0'; x++)
+						slen++;
+					write(1, str, slen);
+					print_ch += slen;
+				}
 			}
 		}
 		format++;

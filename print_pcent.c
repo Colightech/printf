@@ -9,8 +9,8 @@
 int print_pcent(va_list arglist)
 {
 	int pcent = '%';
+	
 	(void) arglist;
-
 	write(1, &pcent, 1);
 	return (pcent);
 }

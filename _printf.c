@@ -6,51 +6,43 @@
  */
 int _printf(const char *format, ...)
 {
-	char *str;
-	int slen, ch, x, print_ch = 0;
+	int x = 0, count = 0, result = 0;
+	int (*f)(va_list);
 	va_list arglist;
 
-	if (format == NULL)
+	if (!format)
 		return (-1);
 	va_start(arglist, format);
-
-	while (*format)
+	while (format[x])
 	{
-		if (*format != '%')
+		if (format[x] != '%')
 		{
-			write(1, format, 1);
-			print_ch++;
+			result = write(1, &format[x], 1);
+			count += result;
+			x++;
+			continue;
 		}
-		else
+		else if (format[x] == '%')
 		{
-			format++;
-			if (*format == '%')
+			f = find_specifiers(&format[x + 1]);
+			if (f != NULL)
 			{
-				write(1, format, 1);
-				print_ch++;
+				result = f(arglist);
+				count += result;
+				x = x + 2;
+				continue;
 			}
-			else if (*format == 'c')
+			if (format[x + 1] == '\0')
+				break;
+			if (format[x + 1] != '\0')
 			{
-				ch = va_arg(arglist, int);
-				write(1, &ch, 1);
-				print_ch++;
-			}
-			else if (*format == 's')
-			{
-				str = va_arg(arglist, char *);
-				if (str == NULL)
-					return (-1);
-				else
-				{
-					for (x = 0; str[x] != '\0'; x++)
-						slen++;
-					write(1, str, slen);
-					print_ch += slen;
-				}
+				result = write(1, &format[x + 1], 1);
+				count += result;
+				x = x + 2;
+				continue;
 			}
 		}
-		format++;
 	}
 	va_end(arglist);
-	return (print_ch);
+	return (count);
 }
